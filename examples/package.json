@@ -18,7 +18,9 @@
     "bugs": {
         "url": "https://github.com/cfansimon/multi-entry-webpack-starter/issues"
     },
-    "devDependencies": {},
+    "devDependencies": {
+      "multi-entry-webpack-starter": "1.0.0"
+    },
     "dependencies": {},
     "scripts": {
         "start": "npm run dev",

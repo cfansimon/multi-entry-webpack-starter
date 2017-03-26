@@ -1,6 +1,6 @@
 {
     "name": "multi-entry-webpack-starter",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "a webpack starter for multi page applications",
     "repository": {
         "type": "git",
@@ -52,6 +52,12 @@
         "presets": ["es2015"],
         "compact": true,
         "comments": false
+    },
+    "bin": {
+        "cross-env": "./node_modules/cross-env/dist/bin/cross-env.js",
+        "babel-node": "./node_modules/babel-cli/bin/babel.js",
+        "webpack": "./node_modules/webpack/bin/webpack.js",
+        "eslint": "./node_modules/eslint/bin/eslint.js"
     },
     "scripts": {
         "start": "babel src --out-dir dist",
