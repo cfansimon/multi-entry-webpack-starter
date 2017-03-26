@@ -11,6 +11,34 @@ make multi-page webapps easy to start with webpack
 
 ### Example of Symfony2 webapp
 
+#### structure
+
+```
+project
+|-app
+|  |-Resources
+|  |  |-assets
+|  |  |  |-common
+|  |  |  |  |-script.js
+|  |  |  |-config
+|  |  |  |  |-parameters.js
+|  |  |  |-libs
+|  |  |  |  |-jquery-plugins
+|  |  |  |  |-less
+|  |  |  |  |-js
+|  |  |  |  |-vendor.js
+|  |  |  |  |-vendor.less
+|-src
+|-web
+|  |-static
+|  |  |-libs
+|  |  |  |-jquery-validation
+|  |  |  |-vendor.js
+|  |  |  |-vendor.css
+```
+
+#### parameters.js
+
 ```javascript
 /**
  * This file is a template of what your parameters.js file should look like.
