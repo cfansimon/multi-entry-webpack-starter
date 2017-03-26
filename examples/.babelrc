@@ -1,0 +1,9 @@
+/**
+* Delete this comment and put it into project root dir.
+*/
+
+{
+  "presets": ["es2015", "stage-0"],
+  "plugins": [],
+  "compact": false
+}

@@ -1,0 +1,30 @@
+/**
+* Delete this comment to start
+* This file is a template of what your package.json file should look like.
+* This file is also a example for symfony2 apps, put it into project root dir.
+* The config of `scripts` is the key point.
+*/
+
+{
+    "name": "multi-entry-webpack-starter",
+    "version": "1.0.0",
+    "description": "a webpack starter for multi page applications",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cfansimon/multi-entry-webpack-starter.git"
+    },
+    "author": "cfansimon@hotmail.com",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/cfansimon/multi-entry-webpack-starter/issues"
+    },
+    "devDependencies": {},
+    "dependencies": {},
+    "scripts": {
+        "start": "npm run dev",
+        "dev": "cross-env NODE_ENV=development babel-node ./app/Resources/assets/config/webpack/webpack.dev.js --parameters ./app/Resources/assets/config/parameters.js",
+        "compile": "cross-env NODE_ENV=production babel-node ./node_modules/.bin/webpack --progress --config ./app/Resources/assets/config/webpack/webpack.config.js --parameters ./app/Resources/assets/config/parameters.js",
+        "compile:debug": "npm run compile -- --debugMode=true",
+        "lint": "eslint src"
+    }
+}
