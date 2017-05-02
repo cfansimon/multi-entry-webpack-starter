@@ -7,7 +7,6 @@ import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
 import FixModuleIdAndChunkIdPlugin from 'fix-moduleid-and-chunkid-plugin';
 import WebpackNotifierPlugin from 'webpack-notifier';
 import HappyPack from 'happypack';
-import {handleDevLock} from '../util';
 
 const __DEBUG__ = appConfig.__DEBUG__;
 const __DEV__ = appConfig.__DEV__;
@@ -19,8 +18,6 @@ let happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
 
 let entries = libEntry;
 let webpackPlugins = [];
-
-handleDevLock(__DEV__);
 
 const bundleEntryKeys = Object.keys(bundleEntry);
 bundleEntryKeys.forEach((key) => {

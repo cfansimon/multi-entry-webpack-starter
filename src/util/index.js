@@ -1,5 +1,4 @@
 import glob from 'glob';
-import fs from 'fs';
 
 const searchEntries = (entryPath, filenamePrefix = '') => {
 
@@ -13,31 +12,4 @@ const searchEntries = (entryPath, filenamePrefix = '') => {
   return files;
 }
 
-const addDevLock = () => {
-  let staticPath = 'web/static';
-  fs.exists(staticPath, (exists) => {
-    if(!exists) {
-      fs.mkdir(staticPath, '0777');
-    }
-    fs.writeFile(staticPath + '/dev.lock', '');
-  })
-}
-
-const removeDevLock = () => {
-  let staticPath = 'web/static';
-  fs.exists(staticPath + '/dev.lock', function(exists) {
-    if (exists) {
-      fs.unlink(staticPath + '/dev.lock');
-    }
-  });
-}
-
-const handleDevLock = (isDev) => {
-  if (isDev) {
-    addDevLock();
-  } else {
-    removeDevLock();
-  }
-}
-
-export { searchEntries, handleDevLock};
+export { searchEntries };
