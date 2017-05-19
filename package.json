@@ -1,6 +1,6 @@
 {
     "name": "multi-entry-webpack-starter",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "description": "a webpack starter for multi page applications",
     "repository": {
         "type": "git",
