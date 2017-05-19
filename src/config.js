@@ -21,35 +21,32 @@ let debugMode = !!argv.debugMode;
 const rootDir = path.resolve('./');
 const globalAssetsDir = path.resolve(rootDir, parameters.paths.globalAssets);
 const libsDir = path.resolve(rootDir, parameters.paths.libs);
-const bundlesDir = path.resolve(rootDir, parameters.paths.bundles);
 const nodeModulesDir = path.resolve(rootDir, 'node_modules');
 
-let assetsSrcDirs = [globalAssetsDir];
+let assetsSrcDirs = [rootDir, globalAssetsDir];
+
 let bundleEntry = {};
-  /**
-   * let bundleEntry = {
-   *    app: {
-   *      app: '/src/AppBundle/Resources/assets/app.js',
-   *      'app/default/index': '/src/AppBundle/Resources/assets/js/default/index.js',
-   *      ...
-   *    },
-   *    admin: {
-   *      admin: '/src/AppBundle/Resources/assets/admin.js',
-   *      'admin/default/index': '/src/AdminBundle/Resources/assets/js/default/index.js',
-   *      ...
-   *    },
-   * };
-   */
-parameters.bundles.forEach((bundle) => {
-  const bundleAssetsDir = `${bundlesDir}/${bundle}/Resources/assets`;
+for (let key in parameters.bundlesEntry) {
+  bundleEntry[key] = {};
+  bundleEntry[key][key] = parameters.bundlesEntry[key]['entry'];
+  Object.assign(bundleEntry[key], searchEntries(parameters.bundlesEntry[key]['chunksPath'], `${key}/`));
+}
 
-  const bundleName = bundle.replace('Bundle', '').toLowerCase();
-  bundleEntry[bundleName] = {};
-  bundleEntry[bundleName][bundleName] = `${bundleAssetsDir}/${bundleName}.js`;
-  Object.assign(bundleEntry[bundleName], searchEntries(`${bundleAssetsDir}/js`, `${bundleName}/`));
-
-  assetsSrcDirs.push(bundleAssetsDir);
-});
+/**
+ * //bundleEntry after process 
+ * {
+ *    app: {
+ *      app: '/src/AppBundle/Resources/assets/app.js',
+ *      'app/default/index': '/src/AppBundle/Resources/assets/js/default/index.js',
+ *      ...
+ *    },
+ *    admin: {
+ *      admin: '/src/AppBundle/Resources/assets/admin.js',
+ *      'admin/default/index': '/src/AdminBundle/Resources/assets/js/default/index.js',
+ *      ...
+ *    },
+ * };
+ */
 
 let libEntry = {};
 let libEntryPrefix = 'libs/';
