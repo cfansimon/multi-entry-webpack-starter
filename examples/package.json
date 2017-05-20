@@ -19,7 +19,7 @@
         "url": "https://github.com/cfansimon/multi-entry-webpack-starter/issues"
     },
     "devDependencies": {
-        "multi-entry-webpack-starter": "^1.1.0"
+        "multi-entry-webpack-starter": "^1.1.1"
     },
     "dependencies": {
     },

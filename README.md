@@ -91,6 +91,25 @@ const parameters = {
     // The `.` will auto be replaced to `-` for compatibility 
     'respond.js/dest/respond.src.js',
   ],
+  pureCopy: [ //pure copy from node_modules to libs output dir
+    {
+      from: 'ckeditor', //relative to node_modules
+      to: 'ckeditor', //relative to libs output dir
+      ignore: [
+        'samples/**',
+        'lang/!(zh-cn.js)',
+        '.github/**',
+        'adapters/**',
+        '.npminstall.done',
+        '*.md',
+        '*.json',
+      ]
+    },
+    {
+      from: 'weui.js/dist/weui.min.js',
+      to: 'weui.js',
+    },
+  ],
 };
 
 export default parameters;
