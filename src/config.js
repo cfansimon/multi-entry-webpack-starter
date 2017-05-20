@@ -22,6 +22,7 @@ const rootDir = path.resolve('./');
 const globalAssetsDir = path.resolve(rootDir, parameters.paths.globalAssets);
 const libsDir = path.resolve(rootDir, parameters.paths.libs);
 const nodeModulesDir = path.resolve(rootDir, 'node_modules');
+const libsOutput = 'libs';
 
 let assetsSrcDirs = [rootDir, globalAssetsDir];
 
@@ -49,15 +50,14 @@ for (let key in parameters.bundlesEntry) {
  */
 
 let libEntry = {};
-let libEntryPrefix = 'libs/';
 //convert relative path to absolute path if it's a js file
 for (let key in parameters.libs) {
-  libEntry[`${libEntryPrefix}${key}`] = [];
+  libEntry[`${libsOutput}/${key}`] = [];
   parameters.libs[key].forEach((le) => {
     if (le.indexOf('.js') > 0) {
-      libEntry[`${libEntryPrefix}${key}`].push(path.resolve(libsDir, le));
+      libEntry[`${libsOutput}/${key}`].push(path.resolve(libsDir, le));
     } else {
-      libEntry[`${libEntryPrefix}${key}`].push(le);
+      libEntry[`${libsOutput}/${key}`].push(le);
     }
   });
 }
@@ -77,11 +77,13 @@ let config = {
   // Webpack
   bundleEntry: bundleEntry,
   libEntry: libEntry,
+  libsOutput: libsOutput,
   output: {
     path : path.resolve(rootDir, parameters.paths.output),
     publicPath: parameters.paths.publicPath,
   },
   noParseDeps: parameters.noParseDeps || [],
+  pureCopy: parameters.pureCopy || [],
   happypack: {
     tempDir: parameters.paths.happypackTempDir || path.resolve(rootDir, '.happypack/'),
   },

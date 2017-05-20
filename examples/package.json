@@ -19,7 +19,7 @@
         "url": "https://github.com/cfansimon/multi-entry-webpack-starter/issues"
     },
     "devDependencies": {
-        "multi-entry-webpack-starter": "^1.0.4"
+        "multi-entry-webpack-starter": "^1.1.0"
     },
     "dependencies": {
     },
@@ -31,7 +31,7 @@
     "scripts": {
         "start": "npm run dev",
         "dev": "node_modules/.bin/cross-env NODE_ENV=development node_modules/.bin/babel-node ./node_modules/multi-entry-webpack-starter/dist/webpack/webpack.dev.js --parameters ./app/Resources/assets/config/parameters.js",
-        "compile": "node_modules/.bin/cross-env NODE_ENV=production node_modules/.bin/babel-node ./node_modules/.bin/webpack --progress --config ./node_modules/multi-entry-webpack-starter/dist/webpack/webpack.config.js --parameters ./app/Resources/assets/config/parameters.js",
+        "compile": "node_modules/.bin/cross-env NODE_ENV=production node_modules/.bin/babel-node ./node_modules/.bin/webpack --progress --config ./node_modules/multi-entry-webpack-starter/dist/webpack/webpack.config.js --parameters ./app/Resources/assets/config/parameters.js --display-error-details",
         "compile:debug": "npm run compile -- --debugMode=true",
         "lint": "eslint src"
     }

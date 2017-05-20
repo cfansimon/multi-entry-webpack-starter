@@ -7,14 +7,20 @@ const parameters = {
   paths: {
     globalAssets: 'app/Resources/assets/', //global assets dir
     happypackTempDir: 'app/cache/dev/',
-    bundles: 'src/', //Symfony2 bundles dir, to be refactor for decoupling
     libs: 'app/Resources/assets/libs/',
     output: 'web/static/', //webpack file output path
     publicPath: '/static/', //relative to website domain
   },
-  bundles: [ //register Symfony2 bundles, to be refactor for decoupling
-    'AppBundle',
-  ],
+  bundlesEntry: { //register entry and its chunks
+    app: {
+      entry: 'src/AppBundle/Resources/assets/app.js',
+      chunksPath: 'src/AppBundle/Resources/assets/js/app/',
+    },
+    admin: {
+      entry: 'src/AppBundle/Resources/assets/admin.js',
+      chunksPath: 'src/AppBundle/Resources/assets/js/admin/',
+    },
+  },
   libs: { // path realtive to globalAssets path, each lib will be compiled into a single file named with the key, like `web/static/libs/vendor.js`, `web/static/libs/fix-ie.js`, and echo lib file must use <scripts src=``web/static/libs/xxx.js`> in the page. This is designed for reducing js contents in each page.
     vendor: ['vendor.js'], //can be a js file
     ckeditor: ['ckeditor'], //or can be a node module name

@@ -7,6 +7,7 @@ import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
 import FixModuleIdAndChunkIdPlugin from 'fix-moduleid-and-chunkid-plugin';
 import WebpackNotifierPlugin from 'webpack-notifier';
 import HappyPack from 'happypack';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const __DEBUG__ = appConfig.__DEBUG__;
 const __DEV__ = appConfig.__DEV__;
@@ -18,6 +19,7 @@ let happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
 
 let entries = libEntry;
 let webpackPlugins = [];
+let pureCopyItems = [];
 
 const bundleEntryKeys = Object.keys(bundleEntry);
 bundleEntryKeys.forEach((key) => {
@@ -29,6 +31,17 @@ bundleEntryKeys.forEach((key) => {
     minChunks: 2,
   }));
 });
+
+appConfig.pureCopy.forEach((item) => {
+  pureCopyItems.push({
+    from : `${nodeModulesDir}/${item.from}`,
+    to: `${appConfig.libsOutput}/${item.to}`,
+    ignore: item.ignore,
+    copyUnmodified: true,
+    force: true
+  });
+});
+
 let config = {
   entry: entries,
   output: Object.assign(appConfig.output, {
@@ -95,14 +108,16 @@ let config = {
     }),
 
     new FixModuleIdAndChunkIdPlugin(),
-
+    
+    new CopyWebpackPlugin(pureCopyItems),
+    
     new WebpackNotifierPlugin({
       title: 'webpack',
       excludeWarnings: true,
       skipFirstNotification: true,
       alwaysNotify: true,
     }),
-
+    
   ].concat(webpackPlugins),
 };
 
