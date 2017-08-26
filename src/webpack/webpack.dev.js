@@ -7,6 +7,14 @@ import cors from 'cors';
 import logger from './logger';
 import webpackDevMiddleware from './middleware/webpack-dev';
 import webpackConfig from './webpack.config';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+
+//处理pureCopy
+const copyCompiler = webpack({
+  output: appConfig.output,
+  plugins: [new CopyWebpackPlugin(appConfig.copyWebpackPluginItems)]
+});
+copyCompiler.run(function(err, stats) {});
 
 const app = express();
 const compiler = webpack(webpackConfig);

@@ -15,7 +15,7 @@
  *    },
  * };
  */var libEntry={};//convert relative path to absolute path if it's a js file
-var _loop=function _loop(_key){libEntry[libsOutput+'/'+_key]=[];parameters.libs[_key].forEach(function(le){if(le.indexOf('.js')>0){libEntry[libsOutput+'/'+_key].push(_path2.default.resolve(libsDir,le));}else{libEntry[libsOutput+'/'+_key].push(le);}});};for(var _key in parameters.libs){_loop(_key);}var config={// Environment
+var _loop=function _loop(_key){libEntry[libsOutput+'/'+_key]=[];parameters.libs[_key].forEach(function(le){if(le.indexOf('.js')>0){libEntry[libsOutput+'/'+_key].push(_path2.default.resolve(libsDir,le));}else{libEntry[libsOutput+'/'+_key].push(le);}});};for(var _key in parameters.libs){_loop(_key);}var copyWebpackPluginItems=[];if(parameters.pureCopy){parameters.pureCopy.forEach(function(item){copyWebpackPluginItems.push({from:nodeModulesDir+'/'+item.from,to:libsOutput+'/'+item.to,ignore:item.ignore,copyUnmodified:true,force:true});});}var config={// Environment
 __DEBUG__:debugMode,__DEV__:process.env.NODE_ENV==='development',__DEV_SERVER_PORT__:port,// Dir
 assetsSrcDirs:assetsSrcDirs,libsDir:libsDir,nodeModulesDir:nodeModulesDir,// Webpack
-bundleEntry:bundleEntry,libEntry:libEntry,libsOutput:libsOutput,output:{path:_path2.default.resolve(rootDir,parameters.paths.output),publicPath:parameters.paths.publicPath},noParseDeps:parameters.noParseDeps||[],pureCopy:parameters.pureCopy||[],happypack:{tempDir:parameters.paths.happypackTempDir||_path2.default.resolve(rootDir,'.happypack/')}};exports.default=config;
+bundleEntry:bundleEntry,libEntry:libEntry,libsOutput:libsOutput,output:{path:_path2.default.resolve(rootDir,parameters.paths.output),publicPath:parameters.paths.publicPath},noParseDeps:parameters.noParseDeps||[],copyWebpackPluginItems:copyWebpackPluginItems,happypack:{tempDir:parameters.paths.happypackTempDir||_path2.default.resolve(rootDir,'.happypack/')}};exports.default=config;

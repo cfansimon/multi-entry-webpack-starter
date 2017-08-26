@@ -19,7 +19,6 @@ let happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
 
 let entries = libEntry;
 let webpackPlugins = [];
-let pureCopyItems = [];
 
 const bundleEntryKeys = Object.keys(bundleEntry);
 bundleEntryKeys.forEach((key) => {
@@ -32,15 +31,9 @@ bundleEntryKeys.forEach((key) => {
   }));
 });
 
-appConfig.pureCopy.forEach((item) => {
-  pureCopyItems.push({
-    from : `${nodeModulesDir}/${item.from}`,
-    to: `${appConfig.libsOutput}/${item.to}`,
-    ignore: item.ignore,
-    copyUnmodified: true,
-    force: true
-  });
-});
+if (!__DEV__ && appConfig.copyWebpackPluginItems.length > 0) {
+  webpackPlugins.push(new CopyWebpackPlugin(appConfig.copyWebpackPluginItems));
+}
 
 let config = {
   entry: entries,
@@ -108,8 +101,6 @@ let config = {
     }),
 
     new FixModuleIdAndChunkIdPlugin(),
-    
-    new CopyWebpackPlugin(pureCopyItems),
     
     new WebpackNotifierPlugin({
       title: 'webpack',

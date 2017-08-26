@@ -62,6 +62,21 @@ for (let key in parameters.libs) {
   });
 }
 
+let copyWebpackPluginItems = [];
+
+if (parameters.pureCopy) {
+  parameters.pureCopy.forEach((item) => {
+    copyWebpackPluginItems.push({
+      from : `${nodeModulesDir}/${item.from}`,
+      to: `${libsOutput}/${item.to}`,
+      ignore: item.ignore,
+      copyUnmodified: true,
+      force: true
+    });
+  });
+}
+
+
 let config = {
 
   // Environment
@@ -83,7 +98,7 @@ let config = {
     publicPath: parameters.paths.publicPath,
   },
   noParseDeps: parameters.noParseDeps || [],
-  pureCopy: parameters.pureCopy || [],
+  copyWebpackPluginItems: copyWebpackPluginItems,
   happypack: {
     tempDir: parameters.paths.happypackTempDir || path.resolve(rootDir, '.happypack/'),
   },
