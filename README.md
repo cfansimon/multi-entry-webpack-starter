@@ -70,6 +70,7 @@ const parameters = {
     other: {
       entry: 'src/OtherBundle/Resources/assets/other.js',
       chunksPath: 'src/OtherBundle/Resources/assets/js/other/',
+      chunksFilter: '/*/index.{js,jsx}',
     },
   },
   libs: { // path realtive to globalAssets path, each lib will be compiled into a single file named with the key, like `web/static/libs/vendor.js`, `web/static/libs/fix-ie.js`, and echo lib file must use <scripts src=``web/static/libs/xxx.js`> in the page. This is designed for reducing js contents in each page.
