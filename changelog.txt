@@ -1,2 +1,5 @@
+2017-08-30 1.2.1
+1. 添加特性：配置项bundlesEntry新增chunksFilter属性，用来匹配需要的chunks;
+
 2017-08-25 1.2.0
-1. 添加特性：copy-webpack-plugin在dev模式下改为生成实体文件，极大提高dev模式下自动编译速度
+1. 添加特性：copy-webpack-plugin在dev模式下改为生成实体文件，极大提高dev模式下自动编译速度;

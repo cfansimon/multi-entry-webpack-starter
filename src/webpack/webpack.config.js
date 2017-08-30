@@ -83,7 +83,6 @@ let config = {
     new HappyPack({
       threadPool: happyThreadPool,
       loaders: ['babel'],
-      tempDir: appConfig.happypack.tempDir,
     }),
 
     new ExtractTextPlugin('[name].css', {

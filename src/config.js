@@ -30,7 +30,11 @@ let bundleEntry = {};
 for (let key in parameters.bundlesEntry) {
   bundleEntry[key] = {};
   bundleEntry[key][key] = parameters.bundlesEntry[key]['entry'];
-  Object.assign(bundleEntry[key], searchEntries(parameters.bundlesEntry[key]['chunksPath'], `${key}/`));
+
+  let chunksPath = parameters.bundlesEntry[key]['chunksPath'];
+  let chunksFilter = parameters.bundlesEntry[key].hasOwnProperty('chunksFilter') ? parameters.bundlesEntry[key]['chunksFilter'] : '/**/*.{js,jsx}';
+
+  Object.assign(bundleEntry[key], searchEntries(chunksPath, chunksFilter, `${key}/`));
 }
 
 /**
@@ -99,9 +103,6 @@ let config = {
   },
   noParseDeps: parameters.noParseDeps || [],
   copyWebpackPluginItems: copyWebpackPluginItems,
-  happypack: {
-    tempDir: parameters.paths.happypackTempDir || path.resolve(rootDir, '.happypack/'),
-  },
 };
 
 export default config;
