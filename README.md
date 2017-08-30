@@ -54,7 +54,6 @@ project
 const parameters = {
   paths: {
     globalAssets: 'app/Resources/assets/', //global assets dir
-    happypackTempDir: 'app/cache/dev/',
     libs: 'app/Resources/assets/libs/',
     output: 'web/static/', //webpack file output path
     publicPath: '/static/', //relative to website domain

@@ -1,3 +1,6 @@
+2017-08-31 1.3
+1. 升级到webpack3.5
+
 2017-08-30 1.2.1
 1. 添加特性：配置项bundlesEntry新增chunksFilter属性，用来匹配需要的chunks;
 

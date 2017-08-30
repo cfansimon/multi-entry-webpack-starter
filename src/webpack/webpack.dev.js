@@ -11,6 +11,9 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 //处理pureCopy
 const copyCompiler = webpack({
+  entry: {
+    'empty': './middleware/empty.js'
+  },
   output: appConfig.output,
   plugins: [new CopyWebpackPlugin(appConfig.copyWebpackPluginItems)]
 });

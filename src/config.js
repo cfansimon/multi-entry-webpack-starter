@@ -5,18 +5,11 @@ import { argv } from 'yargs';
 import path from 'path';
 import { searchEntries } from './util';
 
-let parameters = require(path.resolve(argv.parameters)).default;
+let env = argv.env;
 
-let specialArgv = {};
-argv._.forEach((arg) => {
-  if (arg.indexOf(':') > 0) {
-    let argArr = arg.split(':');
-    specialArgv[argArr[0]] = argArr[1];
-  }
-});
-
-let port = specialArgv.port || 3030;
-let debugMode = !!argv.debugMode;
+let parameters = require(path.resolve(env.parameters)).default;
+let port = env.port || 3030;
+let debugMode = env.debugMode == 1;
 
 const rootDir = path.resolve('./');
 const globalAssetsDir = path.resolve(rootDir, parameters.paths.globalAssets);
@@ -24,7 +17,7 @@ const libsDir = path.resolve(rootDir, parameters.paths.libs);
 const nodeModulesDir = path.resolve(rootDir, 'node_modules');
 const libsOutput = 'libs';
 
-let assetsSrcDirs = [rootDir, globalAssetsDir];
+let assetsSrcDirs = [rootDir, globalAssetsDir, nodeModulesDir];
 
 let bundleEntry = {};
 for (let key in parameters.bundlesEntry) {

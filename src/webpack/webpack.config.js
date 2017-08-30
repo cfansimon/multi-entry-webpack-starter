@@ -4,18 +4,24 @@ import path from 'path';
 import os from 'os';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
-import FixModuleIdAndChunkIdPlugin from 'fix-moduleid-and-chunkid-plugin';
 import WebpackNotifierPlugin from 'webpack-notifier';
 import HappyPack from 'happypack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const __DEBUG__ = appConfig.__DEBUG__;
 const __DEV__ = appConfig.__DEV__;
+const output = appConfig.output;
 const bundleEntry = appConfig.bundleEntry;
 const libEntry = appConfig.libEntry;
+const copyWebpackPluginItems = appConfig.copyWebpackPluginItems;
+const noParseDeps = appConfig.noParseDeps;
+const happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
+
+const assetsSrcDirs = appConfig.assetsSrcDirs;
+const libsDir = appConfig.libsDir;
 const nodeModulesDir = appConfig.nodeModulesDir;
 
-let happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
+const isNeedCompress = !__DEBUG__ && !__DEV__;
 
 let entries = libEntry;
 let webpackPlugins = [];
@@ -31,65 +37,73 @@ bundleEntryKeys.forEach((key) => {
   }));
 });
 
-if (!__DEV__ && appConfig.copyWebpackPluginItems.length > 0) {
-  webpackPlugins.push(new CopyWebpackPlugin(appConfig.copyWebpackPluginItems));
+if (!__DEV__ && copyWebpackPluginItems.length > 0) {
+  webpackPlugins.push(new CopyWebpackPlugin(copyWebpackPluginItems));
 }
 
 let config = {
   entry: entries,
-  output: Object.assign(appConfig.output, {
+  output: Object.assign(output, {
     filename: '[name].js',
   }),
   resolve: {
-    root: appConfig.assetsSrcDirs,
+    modules: assetsSrcDirs,
     alias: {
-      libs: appConfig.libsDir,
+      libs: libsDir,
       nodeModulesDir: nodeModulesDir,
     },
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['*', '.js', '.jsx'],
   },
   module: {
     noParse: [],
-
-    // preLoaders: [{
-    //     test: /\.js$/,
-    //     loader: 'eslint',
-    //     include: appConfig.assetsSrcDirs
-    // }],
-
-    loaders: [
+    rules: [
       {
         test: /\.js[x]?$/,
         loader: 'happypack/loader',
-        include: appConfig.assetsSrcDirs,
-      }, {
-        test: /\.json$/,
-        loader: 'json',
+        include: assetsSrcDirs,
       }, {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css'),
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [{
+            loader: 'css-loader',
+            options: {
+              minimize: isNeedCompress ? true : false
+            }
+          }],
+        }),
       }, {
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract('style', 'css!less'),
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: isNeedCompress ? true : false
+              }
+            },{
+              loader: 'less-loader'
+            }
+          ]
+        }),
       }, {
         test: /\.(png|jpe?g|gif)$/,
-        loader: 'url?limit=8192&name=img/[hash:8].[ext]',
+        loader: 'file-loader?name=img/[name].[ext]',
       }, {
         test: /\.(woff|woff2|eot|ttf|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file?name=fonts/[name].[ext]',
+        loader: 'file-loader?name=fonts/[name].[ext]',
       }],
   },
   plugins: [
     new HappyPack({
       threadPool: happyThreadPool,
-      loaders: ['babel'],
+      loaders: ['babel-loader'],
     }),
 
     new ExtractTextPlugin('[name].css', {
       allChunks: true,
     }),
-    new webpack.NoErrorsPlugin(),
-    new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       __DEBUG__: __DEBUG__,
       __DEV__: __DEV__,
@@ -99,8 +113,6 @@ let config = {
       manifestVariable: 'webpackManifest',
     }),
 
-    new FixModuleIdAndChunkIdPlugin(),
-    
     new WebpackNotifierPlugin({
       title: 'webpack',
       excludeWarnings: true,
@@ -111,7 +123,7 @@ let config = {
   ].concat(webpackPlugins),
 };
 
-appConfig.noParseDeps.forEach(dep => {
+noParseDeps.forEach(dep => {
   // add the specific deps to noParse and alias
   const depPath = path.resolve(nodeModulesDir, dep);
   config.resolve.alias[dep.split(path.sep)[0].replace('.', '-')] = depPath;
@@ -119,39 +131,36 @@ appConfig.noParseDeps.forEach(dep => {
 
 });
 
-config.module.loaders.push({
-  test: new RegExp(`(${appConfig.noParseDeps.join('|')})$`),
-  loader: 'imports?define=>false&module=>false&exports=>false&this=>window',
+config.module.rules.push({
+  test: new RegExp(`(${noParseDeps.join('|')})$`),
+  loader: 'imports-loader?define=>false&module=>false&exports=>false&this=>window',
 });
 
-if (__DEV__) {
-  config.devtool = 'cheap-source-map';
-} else {
-  if (!__DEBUG__) { //do not compress code in debug mode
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        screw_ie8: true,
-        sequences: true,
-        dead_code: true,
-        drop_debugger: true,
-        comparisons: true,
-        conditionals: true,
-        evaluate: true,
-        booleans: true,
-        loops: true,
-        unused: true,
-        hoist_funs: true,
-        if_return: true,
-        join_vars: true,
-        cascade: true,
-        drop_console: true,
-      },
-      output: {
-        comments: false,
-      },
-    }));
-  }
+
+if (isNeedCompress) { //do not compress code in debug mode
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    compress: {
+      warnings: false,
+      screw_ie8: true,
+      sequences: true,
+      dead_code: true,
+      drop_debugger: true,
+      comparisons: true,
+      conditionals: true,
+      evaluate: true,
+      booleans: true,
+      loops: true,
+      unused: true,
+      hoist_funs: true,
+      if_return: true,
+      join_vars: true,
+      cascade: true,
+      drop_console: true,
+    },
+    output: {
+      comments: false,
+    },
+  }));
 }
 
 export default config;
