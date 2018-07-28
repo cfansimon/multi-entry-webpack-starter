@@ -4,7 +4,6 @@ import path from 'path';
 import os from 'os';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
-import WebpackNotifierPlugin from 'webpack-notifier';
 import HappyPack from 'happypack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
@@ -113,13 +112,6 @@ let config = {
       manifestVariable: 'webpackManifest',
     }),
 
-    new WebpackNotifierPlugin({
-      title: 'webpack',
-      excludeWarnings: true,
-      skipFirstNotification: true,
-      alwaysNotify: true,
-    }),
-    
   ].concat(webpackPlugins),
 };
 
