@@ -4,7 +4,6 @@ import webpack from 'webpack';
 import serveIndex from 'serve-index';
 import cors from 'cors';
 
-import logger from './logger';
 import webpackDevMiddleware from './middleware/webpack-dev';
 import webpackConfig from './webpack.config';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -27,5 +26,5 @@ app.use(webpackConfig.output.publicPath, serveIndex(webpackConfig.output.path, {
 app.use(cors());
 
 app.listen(appConfig.__DEV_SERVER_PORT__, '0.0.0.0', () => {
-  logger.info(`Express server listening on ${appConfig.__DEV_SERVER_PORT__} in ${app.settings.env} node`);
+  console.info(`Express server listening on ${appConfig.__DEV_SERVER_PORT__} in ${app.settings.env} node`);
 });
