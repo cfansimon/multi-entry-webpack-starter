@@ -3,7 +3,6 @@ import webpack from 'webpack';
 import path from 'path';
 import os from 'os';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
 import HappyPack from 'happypack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
@@ -106,10 +105,6 @@ let config = {
     new webpack.DefinePlugin({
       __DEBUG__: __DEBUG__,
       __DEV__: __DEV__,
-    }),
-    new ChunkManifestPlugin({
-      filename: 'chunk-manifest.json',
-      manifestVariable: 'webpackManifest',
     }),
 
   ].concat(webpackPlugins),
